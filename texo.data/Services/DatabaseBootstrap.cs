@@ -33,16 +33,11 @@ namespace texo.data.Services
         public void Setup()
         {
             using var connection = GetConnection();
-            if (!File.Exists(SetupDatabaseFile))
-                throw new FileNotFoundException(SetupDatabaseFile);
             var sql = File.ReadAllText(SetupDatabaseFile);
             try
             {
-                var affected_rows = connection.Execute(sql);
-                if (affected_rows > 0)
-                {
-                    _logger.LogInformation("Setup database changed {0} entities", affected_rows);
-                }
+                connection.Execute(sql);
+                _logger.LogInformation("Setup database is done");
             }
             catch (Exception exc)
             {
