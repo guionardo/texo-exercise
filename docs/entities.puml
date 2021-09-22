@@ -1,0 +1,5 @@
+@startuml
+
+Movie "1" *-- "many" Producer : has
+Movie "1" *-- "many" Studio : has
+@enduml
