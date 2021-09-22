@@ -15,7 +15,7 @@ namespace texo.data.Services
     {
         private readonly string _dbConnectionString;
         private readonly ILogger<DatabaseBootstrap> _logger;
-        private readonly string SetupDatabaseFile;
+        public readonly string SetupDatabaseFile;
 
         public DatabaseBootstrap(ILogger<DatabaseBootstrap> logger, IConfiguration configuration)
         {
@@ -39,7 +39,7 @@ namespace texo.data.Services
                 connection.Execute(sql);
                 _logger.LogInformation("Setup database is done");
             }
-            catch (Exception exc)
+            catch (SqliteException exc)
             {
                 _logger.LogError(exc, "Failed to setup database");
                 throw;

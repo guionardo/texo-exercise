@@ -3,7 +3,7 @@ using texo.data.Extensions;
 using texo.domain.Entities;
 using Xunit;
 
-namespace texo.tests.data
+namespace texo.tests.data.Extensions
 {
     [ExcludeFromCodeCoverage]
     public class TexoEntityExtensionsTests

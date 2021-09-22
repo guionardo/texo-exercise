@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -23,7 +26,7 @@ namespace texo.tests.data.Services
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>
                 {
-                    { "ConnectionStrings:default", connectionString },
+                    { "ConnectionStrings:Default", connectionString },
                 })
                 .Build();
 
@@ -42,6 +45,16 @@ namespace texo.tests.data.Services
         public void TestEmptyConnectionString()
         {
             Assert.Throws<MissingConfigurationException>(() => { getBootstrap(""); });
+        }
+
+        [Fact]
+        public void TestBadSQL()
+        {
+            var dbBootStrap = getBootstrap("Data Source=:memory:");
+            var previousContent = File.ReadAllText(dbBootStrap.SetupDatabaseFile);
+            File.WriteAllText(dbBootStrap.SetupDatabaseFile, "BAD SQL;");
+            Assert.Throws<SqliteException>(() => { dbBootStrap.Setup(); });
+            File.WriteAllText(dbBootStrap.SetupDatabaseFile, previousContent);
         }
     }
 }
