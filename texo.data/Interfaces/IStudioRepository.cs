@@ -1,9 +1,9 @@
 using texo.commons.Interfaces;
-using texo.domain.Entities;
+using texo.data.Entities;
 
-namespace texo.data
+namespace texo.data.Interfaces
 {
-    public interface IStudioRepository : IRepository<Studio>
+    public interface IStudioRepository : IRepository<StudioModel>
     {
     }
 }

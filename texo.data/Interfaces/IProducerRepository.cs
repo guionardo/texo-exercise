@@ -1,9 +1,14 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using texo.commons.Interfaces;
-using texo.domain.Entities;
+using texo.data.Dtos;
+using texo.data.Entities;
 
-namespace texo.data
+namespace texo.data.Interfaces
 {
-    public interface IProducerRepository : IRepository<Producer>
+    public interface IProducerRepository : IRepository<ProducerModel>
     {
+        Task<IEnumerable<int>> GetWinnerProducers();
+        Task<IEnumerable<ProducerWinnerIntervalDto>> GetWinnerIntervalsFromProducer(int producerId);
     }
 }

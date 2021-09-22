@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
@@ -10,8 +11,8 @@ namespace texo.data.Abstractions
 {
     public abstract class AbstractRepository<T> : IRepository<T> where T : ITexoEntity
     {
-        protected readonly ILogger _logger;
-        private readonly IDatabaseBootstrap _databaseBootstrap;
+        private readonly ILogger _logger;
+        protected readonly IDatabaseBootstrap DatabaseBootstrap;
         private readonly Func<T, string> _getTextFieldValueMethod;
         private readonly string _textFieldName;
         private readonly string _tableName;
@@ -20,36 +21,28 @@ namespace texo.data.Abstractions
             Func<T, string> getTextFieldValueMethod)
         {
             _logger = logger;
-            _databaseBootstrap = databaseBootstrap;
+            DatabaseBootstrap = databaseBootstrap;
             _getTextFieldValueMethod = getTextFieldValueMethod;
             _textFieldName = textFieldName.GetAsSnakeCase();
-            _tableName = typeof(T).Name.ToLower() + "s";
+            _tableName = typeof(T).GetTableName();
         }
 
         public async Task<T> Get(int id)
         {
-            await using var db = _databaseBootstrap.GetConnection();
+            await using var db = DatabaseBootstrap.GetConnection();
             return await db.QueryFirstOrDefaultAsync<T>($"select * from {_tableName} where id={id};");
+        }
+
+        public async Task<IEnumerable<T>> GetAll()
+        {
+            await using var db = DatabaseBootstrap.GetConnection();
+            return await db.QueryAsync<T>($"select * from {_tableName};");
         }
 
         public async Task Set(T entity)
         {
-            await using var db = _databaseBootstrap.GetConnection();
-            var sql = "";
-            if (entity.Id < 1)
-            {
-                // INSERT
-                var fields = string.Join(',', entity.GetFieldNames(true));
-                var fields_args = string.Join(',', entity.GetFieldNames(true, "@", noSnakeCase: true));
-                sql = $"INSERT INTO {_tableName} ({fields}) VALUES ({fields_args});";
-            }
-            else
-            {
-                // UPDATE
-                var fields = string.Join(',', entity.GetFieldNames());
-                var fields_args = string.Join(',', entity.GetFieldNames(false, "@"));
-                sql = $"UPDATE {_tableName} ({fields}) VALUES ({fields_args})";
-            }
+            await using var db = DatabaseBootstrap.GetConnection();
+            var sql = entity.Id < 1 ? GetInsertSql(entity) : GetUpdateSql(entity);
 
             try
             {
@@ -82,25 +75,47 @@ namespace texo.data.Abstractions
             }
         }
 
+        private string GetUpdateSql(T entity)
+        {
+            var fields = string.Join(',', entity.GetFieldNames());
+            var fieldsArgs = string.Join(',', entity.GetFieldNames(false, "@"));
+            return $"UPDATE {_tableName} ({fields}) VALUES ({fieldsArgs})";
+        }
+
+        private string GetInsertSql(T entity)
+        {
+            var fields = string.Join(',', entity.GetFieldNames(true));
+            var fieldsArgs = string.Join(',', entity.GetFieldNames(true, "@", true));
+            return $"INSERT INTO {_tableName} ({fields}) VALUES ({fieldsArgs});";
+        }
+
         public async Task<T> FindText(string text)
         {
-            await using var db = _databaseBootstrap.GetConnection();
+            await using var db = DatabaseBootstrap.GetConnection();
             var parameter = new
             {
                 Text = text
             };
             var command = new CommandDefinition($"SELECT * FROM {_tableName} WHERE {_textFieldName}=@Text", parameter);
-            var result = await db.QueryFirstOrDefaultAsync<T>(command);
-            if (result is null)
+            try
             {
-                _logger.LogInformation("FindText {0} ({1}) NOT FOUND", _tableName, text);
-            }
-            else
-            {
-                _logger.LogInformation("FindText {0} ({1}) = {2}", _tableName, text, result.Id);
-            }
+                var result = await db.QueryFirstOrDefaultAsync<T>(command);
+                if (result is null)
+                {
+                    _logger.LogInformation("FindText {0} ({1}) NOT FOUND", _tableName, text);
+                }
+                else
+                {
+                    _logger.LogInformation("FindText {0} ({1}) = {2}", _tableName, text, result.Id);
+                }
 
-            return result;
+                return result;
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError(exc, "Failed to find text {0} ({1}) {3}", _tableName, text, exc.Message);
+                throw;
+            }
         }
     }
 }

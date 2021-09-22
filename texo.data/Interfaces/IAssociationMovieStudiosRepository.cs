@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using texo.domain.Entities;
-using Movie = texo.data.Entities.Movie;
+using texo.data.Entities;
 
 namespace texo.data.Interfaces
 {
     public interface IAssociationMovieStudiosRepository
     {
-        Task Assign(Movie parent, IEnumerable<Studio> children);
+        Task Assign(MovieModel parent, IEnumerable<StudioModel> children);
+        
+        Task<IEnumerable<StudioModel>> GetStudiosFromMovie(int movieId);
     }
 }

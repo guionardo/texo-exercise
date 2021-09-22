@@ -13,10 +13,10 @@ namespace texo.data.Services
             if (!File.Exists(fileName))
                 throw new FileNotFoundException("Source file not found", fileName);
 
-            return File.ReadLines(fileName).Skip(1).Select(ParseCSVLine).ToArray();
+            return File.ReadLines(fileName).Skip(1).Select(ParseCsvLine).ToArray();
         }
 
-        private static CsvMovieDto ParseCSVLine(string line)
+        private static CsvMovieDto ParseCsvLine(string line)
         {
             // 1988;Caddyshack II;Warner Bros.;Neil Canton, Jon Peters and Peter Guber;
 

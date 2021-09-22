@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS movies
 (
-    id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    release_year INTEGER NOT NULL,
-    title        TEXT    NOT NULL,
-    winner       INTEGER NOT NULL
+    id      INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    release INTEGER NOT NULL,
+    title   TEXT    NOT NULL,
+    winner  INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS producers

@@ -13,7 +13,7 @@ namespace texo.tests.data.Extensions
         {
             var movie = new Movie();
             var fields = movie.GetFieldNames();
-            Assert.Equal(new[] { "id", "release_year", "title", "studios", "producers", "winner" }, fields);
+            Assert.Equal(new[] { "id", "release", "title", "studios", "producers", "winner" }, fields);
         }
 
         [Fact]
@@ -21,11 +21,11 @@ namespace texo.tests.data.Extensions
         {
             var movie = new Movie();
             var fields = movie.GetFieldNames(noSnakeCase: true);
-            Assert.Equal(new[] { "Id", "ReleaseYear", "Title", "Studios", "Producers", "Winner" }, fields);
+            Assert.Equal(new[] { "Id", "Release", "Title", "Studios", "Producers", "Winner" }, fields);
         }
 
         [Theory]
-        [InlineData("ReleaseYear", "release_year")]
+        [InlineData("Release", "release")]
         [InlineData("Studios", "studios")]
         public void TestSnakeCase(string text, string expected)
         {

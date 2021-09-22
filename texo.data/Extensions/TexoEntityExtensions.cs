@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Dapper.Contrib.Extensions;
 using texo.commons.Interfaces;
+using texo.data.Exceptions;
 
 namespace texo.data.Extensions
 {
@@ -23,5 +26,14 @@ namespace texo.data.Extensions
                 text.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString().ToLower() : x.ToString().ToLower())
             );
         }
+
+        internal static string GetTableName(this MemberInfo t)
+        {
+            var tableAttr = (TableAttribute)Attribute.GetCustomAttribute(t, typeof(TableAttribute));
+            if (tableAttr is null)
+                throw new MissingConfigurationException($"Type {t.Name} doesn't have Table attribute");
+            return tableAttr.Name;
+        }
+       
     }
 }

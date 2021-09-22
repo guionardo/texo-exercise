@@ -3,7 +3,6 @@ using texo.data.Interfaces;
 using texo.data.Repositories;
 using texo.data.Services;
 
-
 namespace texo.data.DependencyInjection
 {
     public static class Setup
@@ -18,7 +17,8 @@ namespace texo.data.DependencyInjection
                 .AddScoped<IProducerRepository, ProducerRepository>()
                 .AddScoped<IStudioRepository, StudioRepository>()
                 .AddScoped<IAssociationMovieStudiosRepository, AssociationMovieStudioRepository>()
-                .AddScoped<IAssociationMovieProducersRepository, AssociationMovieProducersRepository>();
+                .AddScoped<IAssociationMovieProducersRepository, AssociationMovieProducersRepository>()
+                .AddScoped<IProducerService, ProducerService>();
         }
     }
 }

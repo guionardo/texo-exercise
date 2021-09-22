@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -15,7 +14,7 @@ namespace texo.tests.data.Services
     [ExcludeFromCodeCoverage]
     public class DatabaseBootstrapTests
     {
-        private static DatabaseBootstrap getBootstrap(string connectionString)
+        private static DatabaseBootstrap GetBootstrap(string connectionString)
         {
             var serviceProvider = new ServiceCollection()
                 .AddLogging()
@@ -26,7 +25,7 @@ namespace texo.tests.data.Services
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>
                 {
-                    { "ConnectionStrings:Default", connectionString },
+                    { "ConnectionStrings:Default", connectionString }
                 })
                 .Build();
 
@@ -36,7 +35,7 @@ namespace texo.tests.data.Services
         [Fact]
         public void TestSetup()
         {
-            var dbBootStrap = getBootstrap("Data Source=:memory:");
+            var dbBootStrap = GetBootstrap("Data Source=:memory:");
             dbBootStrap.Setup();
             Assert.NotNull(dbBootStrap.GetConnection());
         }
@@ -44,13 +43,13 @@ namespace texo.tests.data.Services
         [Fact]
         public void TestEmptyConnectionString()
         {
-            Assert.Throws<MissingConfigurationException>(() => { getBootstrap(""); });
+            Assert.Throws<MissingConfigurationException>(() => { GetBootstrap(""); });
         }
 
         [Fact]
-        public void TestBadSQL()
+        public void TestBadSql()
         {
-            var dbBootStrap = getBootstrap("Data Source=:memory:");
+            var dbBootStrap = GetBootstrap("Data Source=:memory:");
             var previousContent = File.ReadAllText(dbBootStrap.SetupDatabaseFile);
             File.WriteAllText(dbBootStrap.SetupDatabaseFile, "BAD SQL;");
             Assert.Throws<SqliteException>(() => { dbBootStrap.Setup(); });
