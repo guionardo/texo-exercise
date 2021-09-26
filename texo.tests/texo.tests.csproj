@@ -24,8 +24,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\texo.api\texo.api.csproj" />
       <ProjectReference Include="..\texo.data\texo.data.csproj" />
       <ProjectReference Include="..\texo.domain\texo.domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="movielist.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
