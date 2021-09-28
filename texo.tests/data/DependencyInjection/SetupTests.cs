@@ -14,7 +14,7 @@ namespace texo.tests.data.DependencyInjection
         {
             var services = new ServiceCollection();
             services.AddDataServices();
-            Assert.Equal(9, services.Count);
+            Assert.Equal(10, services.Count);
         }
     }
 }
