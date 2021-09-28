@@ -13,4 +13,10 @@
       <ProjectReference Include="..\texo.data\texo.data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="movielist.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
