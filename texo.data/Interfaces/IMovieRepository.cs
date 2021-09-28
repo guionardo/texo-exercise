@@ -10,5 +10,6 @@ namespace texo.data.Interfaces
         
         Task<IEnumerable<MovieModel>> GetWinnerMoviesFromProducer(int producerId);
         Task<IEnumerable<MovieModel>> GetWinnerMovies();
+        
     }
 }

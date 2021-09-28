@@ -18,7 +18,8 @@ namespace texo.data.DependencyInjection
                 .AddScoped<IStudioRepository, StudioRepository>()
                 .AddScoped<IAssociationMovieStudiosRepository, AssociationMovieStudioRepository>()
                 .AddScoped<IAssociationMovieProducersRepository, AssociationMovieProducersRepository>()
-                .AddScoped<IProducerService, ProducerService>();
+                .AddScoped<IProducerService, ProducerService>()
+                .AddScoped<IMovieService, MovieService>();
         }
     }
 }

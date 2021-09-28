@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Logging;
 using texo.commons.Interfaces;
+using texo.data.Exceptions;
 using texo.data.Extensions;
 using texo.data.Interfaces;
 
@@ -114,6 +115,29 @@ namespace texo.data.Abstractions
             catch (Exception exc)
             {
                 _logger.LogError(exc, "Failed to find text {0} ({1}) {3}", _tableName, text, exc.Message);
+                throw;
+            }
+        }
+
+        public async Task Delete(int id)
+        {
+            await using var db = DatabaseBootstrap.GetConnection();
+            var command = new CommandDefinition($"DELETE FROM {_tableName} WHERE id=@Id", new { Id = id });
+            try
+            {
+                var result = await db.ExecuteAsync(command);
+                if (result > 0)
+                {
+                    _logger.LogInformation("Deleted {0} #{1}", _tableName, id);
+                }
+                else
+                {
+                    throw new EntityNotFoundException(_tableName, id);
+                }
+            }
+            catch (Exception exc)
+            {
+                _logger.LogWarning("Delete failed: {0}", exc.Message);
                 throw;
             }
         }

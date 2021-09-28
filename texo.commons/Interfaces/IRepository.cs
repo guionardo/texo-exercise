@@ -9,5 +9,7 @@ namespace texo.commons.Interfaces
         Task<IEnumerable<T>> GetAll();
         Task Set(T entity);
         Task<T> FindText(string text);
+
+        Task Delete(int id);
     }
 }

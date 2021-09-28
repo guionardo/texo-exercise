@@ -10,7 +10,7 @@ using texo.data.Interfaces;
 
 namespace texo.data.Abstractions
 {
-    public class AssociationAbstractRepository<TParent, TChild, TModel>
+    public class AssociationAbstractRepository<TParent, TChild, TModel> : IAssociationRepository
         where TParent : ITexoEntity
         where TChild : ITexoEntity
         where TModel : ITexoEntity
@@ -63,6 +63,24 @@ namespace texo.data.Abstractions
             catch (Exception exc)
             {
                 _logger.LogError(exc, "Failed to assign");
+                throw;
+            }
+        }
+
+        public async Task UnassignAll(int id)
+        {
+            _logger.LogInformation("Unassigning all {0} from movie #{1}", _associationTableName, id);
+            await using var db = DatabaseBootstrap.GetConnection();
+            var command = new CommandDefinition($"DELETE FROM {_associationTableName} WHERE {_parentKeyField} = @Id",
+                new { Id = id });
+            try
+            {
+                var deletedCount = await db.ExecuteAsync(command);
+                _logger.LogInformation("Unassigned count: {0}", deletedCount);
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError(exc, "Failed to unassign {0} #{1}", _associationTableName, id);
                 throw;
             }
         }

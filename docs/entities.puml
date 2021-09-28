@@ -1,5 +1,40 @@
 @startuml
 
-Movie "1" *-- "many" Producer : has
-Movie "1" *-- "many" Studio : has
+!theme plain
+
+Title "Entities Relationship Diagram"
+entity Movie {
+    *Id : number <<generated>>
+    Release: number
+    Title: text
+    Winner: bool            
+}
+
+entity Producer{
+    int Id
+    string Name
+}
+
+entity Studio {
+   int Id
+   string Name
+}
+
+entity MovieProducers {
+    *Id: number <<generated>>
+    MovieId: number <<FK>>
+    ProducerId: number <<FK>>
+}
+    
+entity MovieStudios {
+    *Id: number <<generated>>
+    MovieId: number <<FK>>
+    StudioId: number <<FK>>
+}
+
+Movie ||--|| MovieProducers
+MovieProducers ||--|| Producer
+Movie ||--|| MovieStudios
+MovieStudios ||--|| Studio
+ 
 @enduml
