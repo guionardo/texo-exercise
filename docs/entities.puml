@@ -11,13 +11,13 @@ entity Movie {
 }
 
 entity Producer{
-    int Id
-    string Name
+   *Id : number <<generated>>
+   Name : text
 }
 
 entity Studio {
-   int Id
-   string Name
+   *Id : number <<generated>>
+   Name : text
 }
 
 entity MovieProducers {
