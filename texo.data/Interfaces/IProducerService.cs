@@ -9,10 +9,10 @@ namespace texo.data.Interfaces
     {
         Task<IEnumerable<Movie>> GetWinnersFromProducer(int producerId);
 
-        Task<IEnumerable<Movie>> GetWinners();
+        // Task<IEnumerable<Movie>> GetWinners();
 
         Task<IEnumerable<ProducerWinnerIntervalDto>> GetWiningsIntervalsFromProducer(int producerId);
-        Task<IEnumerable<ProducerWinnerIntervalDto>> GetWiningsIntervals();
+        // Task<IEnumerable<ProducerWinnerIntervalDto>> GetWiningsIntervals();
 
         Task<(IEnumerable<ProducerWinnerIntervalDto>, IEnumerable<ProducerWinnerIntervalDto>)>
             GetFirstAndLastWinProducers();

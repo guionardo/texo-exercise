@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +13,7 @@ using texo.data.Interfaces;
 
 namespace texo.api
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public Startup(IConfiguration _)
@@ -23,7 +26,22 @@ namespace texo.api
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "texo.api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "texo.api", Version = "v1" ,
+                    Description = "Uma API de exemplo para exercício da Texo",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Guionardo Furlan",
+                        Email="guionardo@gmail.com",
+                        Url=new Uri("https://github.com/guionardo/texo-exercise")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name="MIT License",
+                        Url = new Uri("https://github.com/guionardo/texo-exercise/blob/main/LICENSE")
+                    }
+                });
             });
 
             services

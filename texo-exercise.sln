@@ -19,6 +19,7 @@ ProjectSection(SolutionItems) = preProject
 	Dockerfile = Dockerfile
 	.dockerignore = .dockerignore
 	docker-compose.yaml = docker-compose.yaml
+	Makefile = Makefile
 EndProjectSection
 EndProject
 Global
