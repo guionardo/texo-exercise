@@ -57,7 +57,7 @@ namespace texo.tests.api.Controllers
             databaseBootstrap.Setup();
             var aggregatorService = GetServiceProvider().GetService<IAggregatorService>();
             aggregatorService.LoadDataFromCsv().Wait();
-            _databaseSetupDone = true;
+            // _databaseSetupDone = true;
         }
     }
 }
